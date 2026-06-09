@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>ca1_motor_ctrl</name>
+  <version>0.1.0</version>
+  <description>
+    CiA 402 servo drive simulator and motor controller for the CA-1 cooking station.
+    Provides an object-dictionary interface over ROS 2 services, mimicking
+    CANopen / EtherCAT CoE fieldbus access.
+  </description>
+
+  <maintainer email="you@example.com">Your Name</maintainer>
+  <license>Apache-2.0</license>
+
+  <!-- Build tool -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- Interface generation -->
+  <buildtool_depend>rosidl_default_generators</buildtool_depend>
+
+  <!-- Runtime dependencies -->
+  <depend>rclcpp</depend>
+  <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
+  <exec_depend>rclpy</exec_depend>
+
+  <!-- Interface runtime -->
+  <exec_depend>rosidl_default_runtime</exec_depend>
+
+  <!-- Test dependencies -->
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+  <test_depend>ament_cmake_gtest</test_depend>
+
+  <member_of_group>rosidl_interface_packages</member_of_group>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

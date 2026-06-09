@@ -1,0 +1,30 @@
+# Doxyfile for ca1_motor_ctrl
+# Generates XML consumed by Breathe/Exhale.
+
+PROJECT_NAME           = ca1_motor_ctrl
+INPUT                  = ../include/ca1_motor_ctrl
+RECURSIVE              = YES
+FILE_PATTERNS          = *.hpp *.h
+
+# XML output (consumed by Breathe)
+GENERATE_XML           = YES
+OUTPUT_DIRECTORY       = source/doxygen_xml
+XML_OUTPUT             = .
+
+# Disable other outputs
+GENERATE_HTML          = NO
+GENERATE_LATEX         = NO
+
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = YES
+EXPAND_ONLY_PREDEF     = NO
+
+JAVADOC_AUTOBRIEF      = YES
+QT_AUTOBRIEF           = YES
+
+QUIET                  = YES
+WARNINGS               = YES

@@ -1,0 +1,110 @@
+# =============================================================================
+# CA-1 Motor Controller – CI
+# Builds and tests the ROS 2 package on every push and pull request.
+# Uses the pre-built dev image from ghcr.io (same environment as the
+# devcontainer) so the CI environment is always in sync with local dev.
+# =============================================================================
+
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+    paths-ignore:
+      - "**.md"
+      - "docker/**"
+      - ".devcontainer/**"
+      - ".vscode/**"
+      - ".github/workflows/docker-publish.yml"
+  pull_request:
+    branches: [main, develop]
+    paths-ignore:
+      - "**.md"
+      - "docker/**"
+      - ".devcontainer/**"
+      - ".vscode/**"
+      - ".github/workflows/docker-publish.yml"
+
+# Cancel any in-progress run for the same branch/PR when a new commit arrives.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build & Test (ROS 2 Humble / Ubuntu 22.04)
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: read
+
+    container:
+      image: ghcr.io/bwoerfel/ca1_motor_ctrl:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+      options: --user root
+
+    env:
+      ROS_DISTRO: humble
+      DEBIAN_FRONTEND: noninteractive
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      # -----------------------------------------------------------------------
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: ros2_ws/src/ca1_motor_ctrl
+
+      # -----------------------------------------------------------------------
+      # Cache the rosdep sources database so rosdep update doesn't hit the
+      # network on every run.  Key on package.xml — if deps change, the cache
+      # is invalidated automatically.
+      - name: Cache rosdep database
+        uses: actions/cache@v4
+        with:
+          path: /root/.ros/rosdep
+          key: rosdep-${{ hashFiles('ros2_ws/src/ca1_motor_ctrl/package.xml') }}
+          restore-keys: rosdep-
+
+      # -----------------------------------------------------------------------
+      # build tools and rosdep are already in the dev image; just install
+      # the package's declared dependencies from the OD
+      - name: Install package dependencies
+        run: |
+          source /opt/ros/${ROS_DISTRO}/setup.bash
+          cd ros2_ws
+          rosdep update
+          rosdep install --from-paths src --ignore-src -r -y
+        shell: bash
+
+      # -----------------------------------------------------------------------
+      - name: Build
+        run: |
+          source /opt/ros/${ROS_DISTRO}/setup.bash
+          cd ros2_ws
+          colcon build \
+            --packages-select ca1_motor_ctrl \
+            --cmake-args -DCMAKE_BUILD_TYPE=Release
+        shell: bash
+
+      # -----------------------------------------------------------------------
+      - name: Test
+        run: |
+          source /opt/ros/${ROS_DISTRO}/setup.bash
+          source ros2_ws/install/setup.bash
+          cd ros2_ws
+          colcon test --packages-select ca1_motor_ctrl
+          colcon test-result --verbose
+        shell: bash
+
+      # -----------------------------------------------------------------------
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: ros2_ws/build/ca1_motor_ctrl/test_results/
+          if-no-files-found: ignore

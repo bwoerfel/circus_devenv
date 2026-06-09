@@ -1,0 +1,12 @@
+# OdRead.srv
+# Read a single object-dictionary entry from the CiA 402 simulator.
+#
+# Request
+uint16 index      # OD index   (e.g. 0x6041 for Statusword)
+uint8  subindex   # OD subindex (typically 0x00)
+---
+# Response
+int32  value      # Value read from the OD entry
+bool   success    # True on success, false on error
+string message    # Human-readable error description (empty on success)
+uint32 abort_code # SDO abort code on error (0 on success)

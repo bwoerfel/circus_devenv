@@ -1,0 +1,12 @@
+# OdWrite.srv
+# Write a single object-dictionary entry on the CiA 402 simulator.
+#
+# Request
+uint16 index      # OD index   (e.g. 0x6040 for Controlword)
+uint8  subindex   # OD subindex (typically 0x00)
+int32  value      # Value to write
+---
+# Response
+bool   success    # True on success, false on error
+string message    # Human-readable error description (empty on success)
+uint32 abort_code # SDO abort code on error (0 on success)

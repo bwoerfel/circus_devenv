@@ -1,0 +1,63 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "colcon: build",
+      "type": "shell",
+      "command": "source /opt/ros/humble/setup.bash && colcon build --symlink-install --packages-select ca1_motor_ctrl --cmake-args -DCMAKE_BUILD_TYPE=Debug",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": "$gcc"
+    },
+    {
+      "label": "colcon: build (release)",
+      "type": "shell",
+      "command": "source /opt/ros/humble/setup.bash && colcon build --symlink-install --packages-select ca1_motor_ctrl --cmake-args -DCMAKE_BUILD_TYPE=Release",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": "$gcc"
+    },
+    {
+      "label": "colcon: test",
+      "type": "shell",
+      "command": "source /opt/ros/humble/setup.bash && colcon test --packages-select ca1_motor_ctrl && colcon test-result --verbose",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "ros2: run drive simulator node",
+      "type": "shell",
+      "command": "source /opt/ros/humble/setup.bash && source install/setup.bash && ros2 run ca1_motor_ctrl drive_simulator_node",
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "ros2: run motor controller",
+      "type": "shell",
+      "command": "source /opt/ros/humble/setup.bash && source install/setup.bash && ros2 run ca1_motor_ctrl drive_controller",
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    }
+  ]
+}

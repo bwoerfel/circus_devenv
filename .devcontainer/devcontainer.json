@@ -1,0 +1,60 @@
+{
+  "name": "CA-1 Motor Controller (ROS 2 Humble)",
+  // Pre-built image from ghcr.io — rebuilt automatically on Dockerfile changes.
+  // Requires the package to be public, OR that Docker is already logged in to
+  // ghcr.io.  The initializeCommand below authenticates automatically when the
+  // GitHub CLI (gh) is available and logged in on the host.
+  "image": "ghcr.io/bwoerfel/ca1_motor_ctrl:latest",
+  // Log Docker into GHCR using the host's gh CLI session (if available).
+  // Prerequisite (one-time, on the host):
+  //   gh auth login
+  // Runs before VS Code attempts to pull the image.  Exits cleanly if gh is
+  // absent or not logged in so the error is visible rather than silenced.
+  "initializeCommand": "bash -c 'command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1 && gh auth token | docker login ghcr.io -u $(gh api user --jq .login) --password-stdin || true'",
+  "remoteUser": "newton",
+  // Mount the workspace source into the container
+  "workspaceMount": "source=${localWorkspaceFolder},target=/home/newton/ros2_ws/src/ca1_motor_ctrl,type=bind",
+  "workspaceFolder": "/home/newton/ros2_ws/src/ca1_motor_ctrl",
+  // Forward ROS 2 ports (DDS discovery)
+  "forwardPorts": [],
+  // Run after container is created: install package dependencies
+  "postCreateCommand": "cd /home/newton/ros2_ws && rosdep update && rosdep install --from-paths src --ignore-src -r -y",
+  // Run after container starts: build the workspace
+  "postStartCommand": "cd /home/newton/ros2_ws && bash -c 'source /opt/ros/humble/setup.bash && colcon build --symlink-install --packages-select ca1_motor_ctrl 2>&1 | tail -5 || true'",
+  // VS Code extensions installed automatically inside the container
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools",
+        "ms-vscode.cpptools-extension-pack",
+        "ms-vscode.cmake-tools",
+        "twxs.cmake",
+        "ms-python.python",
+        "ms-azuretools.vscode-docker",
+        "GitHub.vscode-pull-request-github",
+        "eamodio.gitlens",
+        "streetsidesoftware.code-spell-checker",
+        "ms-vscode.hexeditor"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2,
+        "C_Cpp.default.cppStandard": "c++17",
+        "C_Cpp.default.compilerPath": "/usr/bin/g++",
+        "C_Cpp.default.includePath": [
+          "${workspaceFolder}/include/**",
+          "/opt/ros/humble/include/**"
+        ],
+        "cmake.buildDirectory": "/home/newton/ros2_ws/build",
+        "cmake.configureOnOpen": false
+      }
+    }
+  },
+  // Environment variables inside the container
+  "remoteEnv": {
+    "ROS_DOMAIN_ID": "42",
+    "RCUTILS_COLORIZED_OUTPUT": "1",
+    "TZ": "Europe/Berlin"
+  }
+}
