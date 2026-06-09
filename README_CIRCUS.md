@@ -8,7 +8,7 @@
 ## Steps
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/bwoerfel/circus_devenv.git
 ```
 
 Open the cloned folder in VS Code → a notification pops up asking *"Reopen in Container"* → click it.
