@@ -2,8 +2,25 @@
 
 ## Prerequisites (install once)
 
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Windows / macOS) or Docker Engine (Linux)
+**macOS / Linux**
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) or Docker Engine
 - [VS Code](https://code.visualstudio.com/) + the **Dev Containers** extension (`ms-vscode-remote.remote-containers`)
+
+**Windows – option A: Docker Desktop**
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (enables WSL2 backend automatically)
+- [VS Code](https://code.visualstudio.com/) + **Dev Containers** extension
+
+**Windows – option B: WSL2 + native Docker Engine (no Docker Desktop)**
+1. Enable WSL2 and install Ubuntu from the Microsoft Store
+2. Inside the Ubuntu terminal, install Docker Engine:
+   ```bash
+   sudo apt-get update && sudo apt-get install -y docker.io
+   sudo service docker start
+   sudo usermod -aG docker $USER   # log out and back in after this
+   ```
+3. Install VS Code + the **WSL** extension (`ms-vscode-remote.remote-wsl`) + **Dev Containers** extension
+4. Open the project from the Ubuntu terminal: `code .`
+   VS Code connects to WSL2 and "Reopen in Container" works from there.
 
 ## Steps
 
