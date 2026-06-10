@@ -123,9 +123,11 @@ _HTML = b"""\
     <div class="big" id="pos-rd">&#x2014;</div>
 
     <label>Drive operation</label>
-    <button id="enable-btn" class="btn-primary" style="margin-top:4px" onclick="toggleEnable()">Enable Operation</button>
+    <button id="enable-btn" class="btn-primary"
+        style="margin-top:4px" onclick="toggleEnable()">Enable Operation</button>
 
-    <label>OD access <span style="color:#444;font-size:.7rem">READ 6041:0 &nbsp;|&nbsp; WRITE 6040:0 15</span></label>
+    <label>OD access
+      <span style="color:#444;font-size:.7rem">READ 6041:0 | WRITE 6040:0 15</span></label>
     <div class="row" style="margin-top:4px">
       <input type="text" id="od-in"
         style="flex:1;background:#0d0d0d;border:1px solid #333;color:#ddd;
@@ -135,7 +137,8 @@ _HTML = b"""\
       <button class="btn-primary" onclick="odExec()">Execute</button>
     </div>
 
-    <label>Controller log <span style="color:#444;font-size:.7rem">(drive_controller node)</span></label>
+    <label>Controller log
+      <span style="color:#444;font-size:.7rem">(drive_controller node)</span></label>
     <div id="ctrl-log" class="log-box"></div>
   </section>
 
@@ -157,10 +160,12 @@ _HTML = b"""\
     <div class="fault-row">
       <button class="btn-danger"  onclick="injectFault('generic')">Generic&nbsp;Fault</button>
       <button class="btn-warn"    onclick="injectFault('overspeed')">Over-speed</button>
-      <button class="btn-warn"    onclick="injectFault('sensor_timeout')">Sensor&nbsp;Timeout</button>
+      <button class="btn-warn"
+          onclick="injectFault('sensor_timeout')">Sensor&nbsp;Timeout</button>
     </div>
 
-    <label>Simulator log <span style="color:#444;font-size:.7rem">(drive_simulator node)</span></label>
+    <label>Simulator log
+      <span style="color:#444;font-size:.7rem">(drive_simulator node)</span></label>
     <div id="sim-log" class="log-box"></div>
   </section>
 
@@ -209,7 +214,8 @@ function setVel(){
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({rpm})});
   // local log entry - echoed immediately without waiting for SSE round-trip
-  appendLog('ctrl-log','ctrl',['['+new Date().toTimeString().slice(0,8)+'] [CMD] Set velocity: '+rpm+' RPM']);
+  appendLog('ctrl-log','ctrl',['['+new Date().toTimeString().slice(0,8)+
+    '] [CMD] Set velocity: '+rpm+' RPM']);
 }
 
 function toggleEnable(){
@@ -229,7 +235,7 @@ function _updateEnableBtn(en){
 function odExec(){
   const raw=document.getElementById('od-in').value.trim();
   if(!raw)return;
-  const p=raw.split(/\s+/);
+  const p=raw.split(/\\s+/);
   const op=p[0].toUpperCase();
   if(!p[1])return;
   const is=p[1].split(':');

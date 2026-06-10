@@ -101,7 +101,8 @@ public:
         std::shared_ptr<std_srvs::srv::Trigger::Response> res)
       {
         std::lock_guard<std::mutex> lock(mutex_);
-        RCLCPP_WARN(get_logger(), "[FAULT] Generic fault injected (error 0x%04X).",
+        RCLCPP_WARN(
+          get_logger(), "[FAULT] Generic fault injected (error 0x%04X).",
           ErrorCode::GENERIC);
         sim_.inject_fault();
         publish_event("[FAULT] Generic fault injected (error 0x3210)");
@@ -117,7 +118,8 @@ public:
         std::shared_ptr<std_srvs::srv::Trigger::Response> res)
       {
         std::lock_guard<std::mutex> lock(mutex_);
-        RCLCPP_WARN(get_logger(), "[FAULT] Over-speed fault injected (error 0x%04X).",
+        RCLCPP_WARN(
+          get_logger(), "[FAULT] Over-speed fault injected (error 0x%04X).",
           ErrorCode::OVERSPEED);
         sim_.inject_overspeed_fault();
         publish_event("[FAULT] Over-speed fault injected (error 0x8480)");
@@ -133,7 +135,8 @@ public:
         std::shared_ptr<std_srvs::srv::Trigger::Response> res)
       {
         std::lock_guard<std::mutex> lock(mutex_);
-        RCLCPP_WARN(get_logger(), "[FAULT] Sensor timeout fault injected (error 0x%04X).",
+        RCLCPP_WARN(
+          get_logger(), "[FAULT] Sensor timeout fault injected (error 0x%04X).",
           ErrorCode::SENSOR_TIMEOUT);
         sim_.inject_sensor_timeout_fault();
         publish_event("[FAULT] Sensor timeout fault injected (error 0xFF01)");
@@ -219,14 +222,17 @@ private:
           get_logger(), "[FAULT] Drive entered Fault state (error 0x%04X). "
           "Previous state: %s", err, to_string(prev));
         char buf[80];
-        snprintf(buf, sizeof(buf),
+        snprintf(
+          buf, sizeof(buf),
           "[FAULT] Drive faulted (error 0x%04X), was: %s", err, to_string(prev));
         publish_event(buf);
       } else {
         RCLCPP_INFO(
           get_logger(), "[STATE] %s → %s",
           to_string(prev), to_string(cur));
-        publish_event(std::string("[STATE] ") + to_string(prev) + " \xe2\x86\x92 " + to_string(cur));
+        publish_event(
+          std::string("[STATE] ") + to_string(prev) + " \xe2\x86\x92 " +
+          to_string(cur));
       }
     }
   }

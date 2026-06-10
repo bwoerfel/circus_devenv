@@ -114,9 +114,9 @@ static constexpr uint16_t SHUTDOWN = 0x0006;             ///< → Ready to Switc
 static constexpr uint16_t SWITCH_ON = 0x0007;            ///< → Switched On
 static constexpr uint16_t ENABLE_OPERATION = 0x000F;     ///< → Operation Enabled
 static constexpr uint16_t DISABLE_VOLTAGE = 0x0000;      ///< → Switch On Disabled (bit 1 = 0)
-static constexpr uint16_t QUICK_STOP = 0x0002;           ///< → Quick Stop Active (bit 2 = 0, bit 1 = 1)
+static constexpr uint16_t QUICK_STOP = 0x0002;           ///< → Quick Stop Active (bit2=0 bit1=1)
 static constexpr uint16_t FAULT_RESET_BIT = 0x0080;      ///< Rising edge resets fault
-static constexpr uint16_t HALT = (1u << 8);              ///< Halt motion (profile velocity/position)
+static constexpr uint16_t HALT = (1u << 8);              ///< Halt motion (profile velocity/pos)
 }  // namespace Controlword
 
 // ---------------------------------------------------------------------------
@@ -156,7 +156,7 @@ namespace ErrorCode
 {
 static constexpr uint32_t GENERIC = 0x3210u;       ///< Generic / overcurrent (manufacturer)
 static constexpr uint32_t OVERSPEED = 0x8480u;     ///< Speed too high (DS301 §Annex C)
-static constexpr uint32_t SENSOR_TIMEOUT = 0xFF01u; ///< Fieldbus watchdog / sensor timeout (mfr)
+static constexpr uint32_t SENSOR_TIMEOUT = 0xFF01u;  ///< Fieldbus watchdog / sensor timeout (mfr)
 }  // namespace ErrorCode
 
 // ---------------------------------------------------------------------------
